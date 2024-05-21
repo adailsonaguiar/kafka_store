@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { KafkaModule } from './kafka/kafka.module';
-import { ConsumerService } from './kafka/consumer.service';
-import { KafkaProducerService } from './kafka/producer.service';
+import { KafkaModule } from './new_order/index.module';
+import { OrderService } from './new_order/index.service';
+import { FraudDetectorService } from './fraud_detector/index.service';
 
 @Module({
   imports: [KafkaModule],
   controllers: [AppController],
-  providers: [KafkaProducerService, ConsumerService],
+  providers: [OrderService, FraudDetectorService],
 })
 export class AppModule {}

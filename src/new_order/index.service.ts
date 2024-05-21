@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Kafka, Producer } from 'kafkajs';
 
 @Injectable()
-export class KafkaProducerService {
+export class OrderService {
   private producer: Producer;
 
   constructor() {

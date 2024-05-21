@@ -1,9 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { KafkaProducerService } from './kafka/producer.service';
+import { OrderService } from './new_order/index.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly kafkaProducer: KafkaProducerService) {}
+  constructor(private readonly kafkaProducer: OrderService) {}
 
   @Post('produce')
   async newOrder(@Body() body: { product: string; value: number }) {
