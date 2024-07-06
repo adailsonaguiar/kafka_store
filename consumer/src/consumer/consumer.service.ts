@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { Kafka, Producer } from 'kafkajs';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Kafka, Consumer } from 'kafkajs';
 
 @Injectable()
-export class KafkaConsumerService {
-  private producer: Producer;
+export class KafkaConsumerService implements OnModuleInit, OnModuleDestroy {
+  private consumer: Consumer;
 
   constructor() {
     const kafka = new Kafka({
@@ -11,21 +11,25 @@ export class KafkaConsumerService {
       brokers: ['localhost:9092'],
     });
 
-    this.producer = kafka.producer();
+    this.consumer = kafka.consumer({ groupId: 'my-group' });
   }
 
-  async connect() {
-    await this.producer.connect();
-  }
+  async onModuleInit() {
+    await this.consumer.connect();
+    await this.consumer.subscribe({ topic: 'orders', fromBeginning: true });
 
-  async produce(topic: string, message: string) {
-    await this.producer.send({
-      topic,
-      messages: [{ value: message }],
+    await this.consumer.run({
+      eachMessage: async ({ topic, partition, message }) => {
+        console.log({
+          partition,
+          offset: message.offset,
+          value: message.value.toString(),
+        });
+      },
     });
   }
 
-  async disconnect() {
-    await this.producer.disconnect();
+  async onModuleDestroy() {
+    await this.consumer.disconnect();
   }
 }

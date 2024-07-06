@@ -1,5 +1,5 @@
 {
-  "name": "kafka_store_producer",
+  "name": "kafka_store_consumer",
   "private": true,
   "version": "1.0.0",
   "description": "Nest TypeScript starter repository",
