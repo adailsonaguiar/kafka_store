@@ -1,9 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { KafkaProducerService } from './kafka/producer.service';
+import { KafkaProducerService } from './producer/producer.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly kafkaProducer: KafkaProducerService) {}
+  constructor(
+    private readonly kafkaProducer: KafkaProducerService,
+  ) {}
 
   @Post('produce')
   async newOrder(@Body() body: { product: string; value: number }) {
@@ -12,4 +14,5 @@ export class AppController {
     await this.kafkaProducer.disconnect();
     return { success: true };
   }
+
 }
