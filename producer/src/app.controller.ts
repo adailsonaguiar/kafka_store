@@ -8,7 +8,10 @@ export class AppController {
   @Post('produce')
   async newOrder(@Body() body: { product: string; value: number }) {
     await this.kafkaProducer.connect();
-    await this.kafkaProducer.produce('orders', JSON.stringify(body));
+
+    const data = { ...body, id: new Date().getTime() };
+
+    await this.kafkaProducer.produce('orders', JSON.stringify(data));
     await this.kafkaProducer.disconnect();
     return { success: true };
   }
